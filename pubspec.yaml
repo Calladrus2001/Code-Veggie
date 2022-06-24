@@ -13,6 +13,7 @@ dependencies:
   http: ^0.13.4
   firebase_core: ^1.18.0
   firebase_auth: ^3.3.20
+  font_awesome_flutter: ^10.1.0
   get: ^4.6.5
   flutter:
     sdk: flutter
