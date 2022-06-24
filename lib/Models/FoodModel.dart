@@ -297,7 +297,7 @@ class FoodNutrient {
   int? rank;
   int? indentLevel;
   int? foodNutrientId;
-  int? percentDailyValue;
+  num? percentDailyValue;
 
   factory FoodNutrient.fromJson(Map<String, dynamic> json) => FoodNutrient(
         nutrientId: json["nutrientId"],

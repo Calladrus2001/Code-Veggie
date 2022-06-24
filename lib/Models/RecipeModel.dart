@@ -100,8 +100,8 @@ class Result {
   String? image;
   ImageType? imageType;
   String? summary;
-  List<Cuisine>? cuisines;
-  List<DishType>? dishTypes;
+  List<Cuisine?>? cuisines;
+  List<DishType?>? dishTypes;
   List<String>? diets;
   List<String>? occasions;
   List<AnalyzedInstruction>? analyzedInstructions;
@@ -136,9 +136,9 @@ class Result {
         image: json["image"],
         imageType: imageTypeValues.map[json["imageType"]],
         summary: json["summary"],
-        cuisines: List<Cuisine>.from(
+        cuisines: List<Cuisine?>.from(
             json["cuisines"].map((x) => cuisineValues.map[x])),
-        dishTypes: List<DishType>.from(
+        dishTypes: List<DishType?>.from(
             json["dishTypes"].map((x) => dishTypeValues.map[x])),
         diets: List<String>.from(json["diets"].map((x) => x)),
         occasions: List<String>.from(json["occasions"].map((x) => x)),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:codeveggie/Models/FoodModel.dart';
 import 'package:codeveggie/Models/RecipeModel.dart';
 import 'package:codeveggie/Services/FoodService.dart';
@@ -56,7 +58,7 @@ class _FoodResultState extends State<FoodResult> {
       backgroundColor: Colors.white,
       body: haveData
           ? PageView.builder(
-              itemCount: chips.length,
+              itemCount: min(chips.length, _recipe.results!.length),
               itemBuilder: (context, int index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,6 +87,19 @@ class _FoodResultState extends State<FoodResult> {
                             child: Chip(
                                 label: Text(
                                     _recipe.results![index].title.toString()))),
+                        Positioned(
+                            top: 250,
+                            left: 5,
+                            child: Chip(
+                              backgroundColor:
+                                  _recipe.results![index].healthScore! > 50
+                                      ? clr1
+                                      : Colors.red,
+                              label: Text(
+                                  _recipe.results![index].healthScore
+                                      .toString(),
+                                  style: TextStyle(color: Colors.white)),
+                            ))
                       ],
                     ),
                     SizedBox(height: 16),
@@ -115,6 +130,16 @@ class _FoodResultState extends State<FoodResult> {
                       ),
                     ),
                     SizedBox(height: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        "Recipe: ",
+                        style: TextStyle(
+                            color: clr1,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
                   ],
                 );
               })
