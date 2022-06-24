@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "998424778700",
+    "project_id": "codeveggie-63dff",
+    "storage_bucket": "codeveggie-63dff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998424778700:android:d07ce2ca610095fc56ef69",
+        "android_client_info": {
+          "package_name": "com.example.codeveggie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998424778700-gk5gnjiajl7r6ihk9pjsnvu6at18irac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNb6BlOW6wEPnRBfyVqkBYcHCFEKAPpsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998424778700-gk5gnjiajl7r6ihk9pjsnvu6at18irac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
