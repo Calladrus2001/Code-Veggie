@@ -18,4 +18,8 @@ Map<String, double> carbonfp = {
   "beet juice": 0.05,
   "sunflower oil": 3.3,
   "citric acid": 21.0,
+  "semolina": 1.0,
+  "eggs": 0.2,
+  "onion": 0.5,
+  "onion extract": 0.5,
 };
