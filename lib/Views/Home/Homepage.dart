@@ -1,4 +1,6 @@
+import 'package:codeveggie/Views/Home/Chat.dart';
 import 'package:codeveggie/Views/Home/Discover.dart';
+import 'package:codeveggie/Views/Home/Report.dart';
 import 'package:codeveggie/Views/Home/YourRecipies.dart';
 import 'package:codeveggie/Views/Home/News.dart';
 import 'package:codeveggie/constants.dart';
@@ -16,6 +18,8 @@ class _HomepageState extends State<Homepage> {
   List<Widget> bodyPages = [
     YourRecipies(),
     Discover(),
+    ChatHome(),
+    Report(),
     // NewsPage(),
   ];
   int _index = 1;
@@ -34,6 +38,10 @@ class _HomepageState extends State<Homepage> {
                 icon: Icon(Icons.book_outlined), label: "Your Recipes"),
             BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.globe), label: "Discover"),
+            BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.report_gmailerrorred_outlined),
+                label: "Report"),
             // BottomNavigationBarItem(
             //     icon: Icon(Icons.newspaper_outlined), label: "News"),
           ],

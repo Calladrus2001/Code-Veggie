@@ -57,8 +57,8 @@ class _YourRecipiesState extends State<YourRecipies> {
                 return Card(
                   elevation: 4.0,
                   child: ListTile(
-                    title: Text(data['Name'], style: TextStyle(color: clr1)),
-                    subtitle: Text(data['timestamp'].toString()),
+                    title: Text(data["Name"]),
+                    subtitle: Text(data['Recipe']),
                   ),
                 );
               }).toList(),

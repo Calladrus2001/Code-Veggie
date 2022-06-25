@@ -1,12 +1,15 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codeveggie/Models/FoodModel.dart';
 import 'package:codeveggie/Models/RecipeModel.dart';
 import 'package:codeveggie/Services/FoodService.dart';
 import 'package:codeveggie/Services/GetFootprint.dart';
 import 'package:codeveggie/Services/RecipeService.dart';
 import 'package:codeveggie/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class FoodResult extends StatefulWidget {
@@ -23,6 +26,12 @@ class _FoodResultState extends State<FoodResult> {
   bool haveData = false;
   final box = GetStorage();
   List<List<Widget>> chips = [];
+  List<String> recipes = [];
+  int recipeIndex = 0;
+  CollectionReference entries = FirebaseFirestore.instance
+      .collection('Users')
+      .doc("${FirebaseAuth.instance.currentUser!.email}")
+      .collection("Recipes");
 
   getData() async {
     String query = box.read("query");
@@ -35,6 +44,9 @@ class _FoodResultState extends State<FoodResult> {
         setState(() {
           haveData = true;
         });
+      }
+      for (int i = 0; i < _recipe.results!.length; i++) {
+        recipes.add(CarbonFootprint().getRecipe(_recipe.results![i]));
       }
     }
   }
@@ -52,7 +64,16 @@ class _FoodResultState extends State<FoodResult> {
         child: Icon(Icons.save_alt_outlined, color: clr1),
         backgroundColor: Colors.white,
         onPressed: () {
-          /// enter recipe to Firestore
+          entries
+              .add({
+                "Recipe": recipes[recipeIndex],
+                "User": FirebaseAuth.instance.currentUser!.email,
+                "Timestamp": Timestamp.now(),
+                "Name": _recipe.results![recipeIndex].title
+              })
+              .then((value) => print("Entry Added"))
+              .catchError((error) => print("Failed to add entry: $error"));
+          Get.snackbar("Code:Veggie", "Recipe added!");
         },
       ),
       backgroundColor: Colors.white,
@@ -60,6 +81,7 @@ class _FoodResultState extends State<FoodResult> {
           ? PageView.builder(
               itemCount: min(chips.length, _recipe.results!.length),
               itemBuilder: (context, int index) {
+                recipeIndex = index;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -140,6 +162,23 @@ class _FoodResultState extends State<FoodResult> {
                             fontWeight: FontWeight.w500),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+                        height: 250,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(width: 1, color: clr1)),
+                        child: SingleChildScrollView(
+                          child: Text(
+                            recipes[index],
+                            style: TextStyle(color: clr1, fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 );
               })

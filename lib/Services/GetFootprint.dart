@@ -1,4 +1,5 @@
 import 'package:codeveggie/Models/FoodModel.dart';
+import 'package:codeveggie/Models/RecipeModel.dart';
 import 'package:codeveggie/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -48,5 +49,15 @@ class CarbonFootprint {
       aux = [];
     }
     return chips;
+  }
+
+  String getRecipe(Result res) {
+    String recipe = "";
+    for (int i = 0; i < res.analyzedInstructions![0].steps!.length; i++) {
+      recipe += "Step${i + 1}: " +
+          res.analyzedInstructions![0].steps![i].step! +
+          "\n\n";
+    }
+    return recipe;
   }
 }
