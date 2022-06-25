@@ -20,7 +20,7 @@ class _HomepageState extends State<Homepage> {
     Discover(),
     ChatHome(),
     Report(),
-    // NewsPage(),
+    NewsPage(),
   ];
   int _index = 1;
 
@@ -42,8 +42,8 @@ class _HomepageState extends State<Homepage> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.report_gmailerrorred_outlined),
                 label: "Report"),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.newspaper_outlined), label: "News"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.newspaper_outlined), label: "News"),
           ],
           onTap: (int index) {
             setState(() {
