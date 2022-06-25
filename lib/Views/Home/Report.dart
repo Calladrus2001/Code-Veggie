@@ -1,6 +1,9 @@
+import 'package:codeveggie/Services/Geolocation.dart';
+import 'package:codeveggie/Services/StorageService.dart';
 import 'package:codeveggie/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -10,8 +13,12 @@ class Report extends StatefulWidget {
 }
 
 class _ReportState extends State<Report> {
-  ImagePicker _picker = new ImagePicker();
-  XFile? image;
+  bool haveImage = false;
+  bool haveLocation = false;
+  var location;
+  late Position _pos;
+  var path;
+  final Storage storage = Storage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +40,13 @@ class _ReportState extends State<Report> {
                 child: Container(
                   height: 55,
                   width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: clr1,
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Step 1: Upload an Image",
                         style: TextStyle(
                             color: Colors.white,
@@ -49,20 +59,26 @@ class _ReportState extends State<Report> {
                           minRadius: 18,
                           backgroundColor: Colors.green,
                           child: Icon(
-                            Icons.upload_rounded,
+                            haveImage ? Icons.check : Icons.upload_rounded,
                             color: Colors.white,
                           ),
                         ),
                         onTap: () async {
-                          image = await _picker.pickImage(
-                              source: ImageSource.gallery);
+                          final result = await FilePicker.platform.pickFiles(
+                              allowMultiple: false,
+                              type: FileType.custom,
+                              allowedExtensions: ['png', 'jpg', 'jpeg']);
+                          if (result != null) {
+                            final path = result.files.single.path;
+                            final filename = result.files.single.name;
+                            storage.uploadFile(filename, path!);
+                          }
+
+                          /// upload to firebase storage
                         },
                       )
                     ],
                   ),
-                  decoration: BoxDecoration(
-                      color: clr1,
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
                 ),
               )),
           SizedBox(height: 24),
@@ -72,10 +88,13 @@ class _ReportState extends State<Report> {
                 child: Container(
                   height: 55,
                   width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: clr1,
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Step 2: Upload location",
                         style: TextStyle(
                             color: Colors.white,
@@ -86,20 +105,32 @@ class _ReportState extends State<Report> {
                       GestureDetector(
                         child: Chip(
                           backgroundColor: Colors.green,
-                          label: Text(
-                            "Get Location",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          label: haveLocation
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  "Get Location",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                         ),
-                        onTap: () {
-                          /// pick image
+                        onTap: () async {
+                          Position pos = await Location().determinePosition();
+                          if (pos.latitude != null) {
+                            location =
+                                "https://www.google.com/maps/dir/?api=1&destination=" +
+                                    Uri.encodeComponent(
+                                        "${pos.latitude}, ${pos.longitude}");
+                            setState(() {
+                              _pos = pos;
+                              haveLocation = true;
+                            });
+                          }
                         },
                       )
                     ],
                   ),
-                  decoration: BoxDecoration(
-                      color: clr1,
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
                 ),
               )),
           SizedBox(height: 24),
@@ -127,6 +158,18 @@ class _ReportState extends State<Report> {
                       borderRadius: BorderRadius.all(Radius.circular(25))),
                 ),
               )),
+          SizedBox(height: 16),
+          if (haveLocation && haveImage)
+            GestureDetector(
+              child: Chip(
+                elevation: 4.0,
+                backgroundColor: Colors.white,
+                label: Text("Report Garbage", style: TextStyle(color: clr1)),
+              ),
+              onTap: () {
+                /// add this post to forum
+              },
+            )
         ],
       ),
     );
